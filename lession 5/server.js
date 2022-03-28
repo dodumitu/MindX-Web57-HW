@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
   },
 });
 
-const PostModel = mongoose.model("Post", postSchema);
+const postModel = mongoose.model("Post", postSchema);
 
 mongoose.connect("mongodb://localhost:27017/demo_db", (err) => {
   if (err) {
@@ -26,7 +26,7 @@ app.use(express.json());
 app.post("/api/posts", async (req, res) => {
   const { content, createdBy } = req.body;
 
-  const newPost = await PostModel.create({
+  const newPost = await postModel.create({
     content,
     createdBy,
   });
@@ -35,7 +35,7 @@ app.post("/api/posts", async (req, res) => {
 });
 
 app.get("/api/posts", async (req, res) => {
-  const posts = await PostModel.find({});
+  const posts = await postModel.find({});
 
   res.send({ success: 1, data: posts });
 });
@@ -43,7 +43,7 @@ app.get("/api/posts", async (req, res) => {
 app.get("/api/posts/:postId", async (req, res) => {
   const { postId } = req.params;
 
-  const foundPost = await PostModel.findOne({ _id: postId });
+  const foundPost = await postModel.findOne({ _id: postId });
 
   res.send({ success: 1, data: foundPost });
 });
@@ -52,7 +52,7 @@ app.put("/api/posts/:postId", async (req, res) => {
   const { postId } = req.params;
   const { content } = req.body;
 
-  const updatedPost = await PostModel.findByIdAndUpdate(
+  const updatedPost = await postModel.findByIdAndUpdate(
     postId,
     { content },
     { new: true }
@@ -64,7 +64,7 @@ app.put("/api/posts/:postId", async (req, res) => {
 app.delete("/api/posts/:postId", async (req, res) => {
   const { postId } = req.params;
 
-  const deletedPost = await PostModel.findByIdAndDelete(postId);
+  const deletedPost = await postModel.findByIdAndDelete(postId);
 
   res.send({ success: 1, data: deletedPost });
 });
@@ -81,12 +81,12 @@ const commentSchema = new mongoose.Schema({
   },
 });
 
-const CommentModel = mongoose.model("Comment", commentSchema);
+const commentModel = mongoose.model("Comment", commentSchema);
 
 app.post("/api/comments", async (req, res) => {
   const { content, createdBy, postId } = req.body;
 
-  const newComment = await CommentModel.create({
+  const newComment = await commentModel.create({
     content,
     createdBy,
     postId,
@@ -96,7 +96,7 @@ app.post("/api/comments", async (req, res) => {
 });
 
 app.get("/api/comments", async (req, res) => {
-  const comments = await CommentModel.find({});
+  const comments = await commentModel.find({});
 
   res.send({ success: 1, data: comments });
 });
@@ -104,7 +104,7 @@ app.get("/api/comments", async (req, res) => {
 app.get("/api/comments/:commentId", async (req, res) => {
   const { commentId } = req.params;
 
-  const foundComment = await CommentModel.findOne({ _id: commentId });
+  const foundComment = await commentModel.findOne({ _id: commentId });
 
   res.send({ success: 1, data: foundComment });
 });
@@ -113,7 +113,7 @@ app.put("/api/comments/:commentId", async (req, res) => {
   const { commentId } = req.params;
   const { content } = req.body;
 
-  const updateComment = await CommentModel.findByIdAndUpdate(
+  const updateComment = await commentModel.findByIdAndUpdate(
     commentId,
     { content },
     { new: true }
@@ -125,7 +125,7 @@ app.put("/api/comments/:commentId", async (req, res) => {
 app.delete("/api/comments/:commentId", async (req, res) => {
   const { commentId } = req.params;
 
-  const deletedComment = await CommentModel.findByIdAndDelete(commentId);
+  const deletedComment = await commentModel.findByIdAndDelete(commentId);
 
   res.send({ success: 1, data: deletedComment });
 });
@@ -133,7 +133,7 @@ app.delete("/api/comments/:commentId", async (req, res) => {
 app.get("/api/posts/:postId/comments", async (req, res) => {
   const { postId } = req.params;
 
-  const postComment = await CommentModel.find({ postId: postId });
+  const postComment = await commentModel.find({ postId: postId });
 
   res.send({ success: 1, data: postComment });
 });
